@@ -1,103 +1,117 @@
 package euler
-import scala.math.BigInt
+import math.BigInt
 
 object Euler {
 
     def main( args: Array[String] ): Unit = {
-            solve16
+        solve3
+    }
+
+    def solve3 {
+        def algo( l: Long ) = {
+            val r = Range.Long( math.sqrt( l ).toLong, 2, -1 )
+            val index = r.indexWhere( ( f ) => ( l % f == 0 ) && isPrime( f ) )
+            r( index )
+        }
+        def isPrime( l: Long ) = {
+            val r = 2L to math.sqrt( l ).toLong
+            !r.exists( l % _ == 0 )
+
+        }
+        println( algo( 600851475143L ))
     }
 
     def solve4 {
-        def isPalindromic( num:Int ) : Boolean = {
+        def isPalindromic( num: Int ): Boolean = {
             val str = num.toString
             val len = str.length() / 2
-            str.substring(0,len) == str.substring(str.length() - len, str.length() ).reverse
+            str.substring( 0, len ) == str.substring( str.length() - len, str.length() ).reverse
         }
 
         var result = 0
-        for( i <- Range( 999, 99, -1 )
-             ;
-             j <- Range( 999, 99, -1 )
+        for (
+            i <- Range( 999, 99, -1 );
+            j <- Range( 999, 99, -1 )
         ) {
-            val prod = i*j
-            if ( prod > result && isPalindromic(prod) ) {
+            val prod = i * j
+            if ( prod > result && isPalindromic( prod ) ) {
                 result = prod
             }
         }
-        
+
         println( result )
     }
-    
+
     def solve5 {
         val divisors = 1 to 20
-        
+
         def divisable( num: Long ) = {
             divisors.forall( num % _ == 0 )
         }
-        
+
         var num = 1L
-        while( !divisable( num ) ) {
+        while ( !divisable( num ) ) {
             num += 1
         }
-        
+
         println( num )
     }
-    
+
     def solve6 {
         def sumOfSquare( nums: List[Long] ) = {
-            nums.foldLeft(0L)( (a,b) => a + b*b )
+            nums.foldLeft( 0L )( ( a, b ) => a + b * b )
         }
-        
+
         def squareOfSum( nums: List[Long] ) = {
             val sum = nums.sum
             sum * sum
         }
-        
-        val nums = Range.Long.inclusive(1, 100, 1).toList
-        println( sumOfSquare(nums) - squareOfSum(nums) )
+
+        val nums = Range.Long.inclusive( 1, 100, 1 ).toList
+        println( sumOfSquare( nums ) - squareOfSum( nums ) )
     }
-    
+
     def solve7 {
         def isPrime( num: Long ) = {
             if ( num == 2 || num == 3 ) true
             else if ( num % 2 == 0 || num % 3 == 0 ) false
             else {
-                val limit = Math.sqrt(num).toLong
+                val limit = Math.sqrt( num ).toLong
                 var k = 1
                 var over = false
                 var result = true
                 while ( !over ) {
-                    val minus1 = 6*k-1
+                    val minus1 = 6 * k - 1
                     if ( minus1 > limit ) over = true
                     else if ( num % minus1 == 0 ) {
                         result = false
                         over = true
                     }
                     if ( !over ) {
-                    val plus1 = 6*k+1
-                    if ( plus1 > limit ) over = true
-                    else if ( num % plus1 == 0 ) {
-                        result = false
-                        over = true
+                        val plus1 = 6 * k + 1
+                        if ( plus1 > limit ) over = true
+                        else if ( num % plus1 == 0 ) {
+                            result = false
+                            over = true
+                        }
                     }
-                    }
-                    if ( !over ) k+=1
+                    if ( !over ) k += 1
                 }
                 result
             }
         }
-        
+
         var count = 1
         var num = 1
         while ( count < 10001 ) {
             num += 2
-            if ( isPrime(num) ) {
+            if ( isPrime( num ) ) {
                 count += 1
             }
-        } 
-        println(num)
+        }
+        println( num )
     }
-    
+
     def solve8 {
         val num = """
                      73167176531330624919225119674426574742355349194934
@@ -120,8 +134,8 @@ object Euler {
                      84580156166097919133875499200524063689912560717606
                      05886116467109405077541002256983155200055935729725
                      71636269561882670428252483600823257530420752963450
-            """.filterNot( c => c=='\r' || c=='\n' || c==' ')
-/*
+            """.filterNot( c => c == '\r' || c == '\n' || c == ' ' )
+        /*
         var index = 0
         var list = List[String]()
         while ( index != -1 ) {
@@ -134,131 +148,132 @@ object Euler {
         list = list.sort( _ > _ )
         println ( list.mkString(" ") )
         println( list(0).toInt * list(1).toInt )
-*/        
+*/
         def product( num: String ) = {
-            num.foldLeft(1)( _ * _.toString.toInt )
+            num.foldLeft( 1 )( _ * _.toString.toInt )
         }
         var index = 0
         var maxProd = 0
         while ( index < num.length() - 4 ) {
-            maxProd = maxProd.max( product( num.substring(index, index + 5) ) )
+            maxProd = maxProd.max( product( num.substring( index, index + 5 ) ) )
             index += 1
         }
         println( maxProd )
     }
-    
+
     def solve9 {
-        val result = for( i <- 1 to 1000;
-             j <- i to 1000;
-             k = 1000 - i -j if i*i + j*j == k*k)
-        yield {
-            i*j*k
+        val result = for (
+            i <- 1 to 1000;
+            j <- i to 1000;
+            k = 1000 - i - j if i * i + j * j == k * k
+        ) yield {
+            i * j * k
         }
         println( result )
-        
+
     }
-    
+
     def solve10 {
-        println ( Range.Long.inclusive(2, 2000000, 1).filter( isPrime _ ).sum )
-        
+        println( Range.Long.inclusive( 2, 2000000, 1 ).filter( isPrime _ ).sum )
+
         def isPrime( num: Long ) = {
             if ( num == 2 || num == 3 ) true
             else if ( num % 2 == 0 || num % 3 == 0 ) false
             else {
-                val limit = Math.sqrt(num).toLong
+                val limit = Math.sqrt( num ).toLong
                 var k = 1
                 var over = false
                 var result = true
                 while ( !over ) {
-                    val minus1 = 6*k-1
+                    val minus1 = 6 * k - 1
                     if ( minus1 > limit ) over = true
                     else if ( num % minus1 == 0 ) {
                         result = false
                         over = true
                     }
                     if ( !over ) {
-                    val plus1 = 6*k+1
-                    if ( plus1 > limit ) over = true
-                    else if ( num % plus1 == 0 ) {
-                        result = false
-                        over = true
+                        val plus1 = 6 * k + 1
+                        if ( plus1 > limit ) over = true
+                        else if ( num % plus1 == 0 ) {
+                            result = false
+                            over = true
+                        }
                     }
-                    }
-                    if ( !over ) k+=1
+                    if ( !over ) k += 1
                 }
                 result
             }
         }
     }
-    
+
     def solve11 {
         val GridSize = 20
         val grid = Array[Array[Int]](
-                Array[Int](8,02,22,97,38,15,00,40,00,75,04,05,07,78,52,12,50,77,91,8),
-                Array[Int](49,49,99,40,17,81,18,57,60,87,17,40,98,43,69,48,04,56,62,0),
-                Array[Int](81,49,31,73,55,79,14,29,93,71,40,67,53,88,30,03,49,13,36,65),
-                Array[Int](52,70,95,23,04,60,11,42,69,24,68,56,01,32,56,71,37,02,36,91),
-                Array[Int](22,31,16,71,51,67,63,89,41,92,36,54,22,40,40,28,66,33,13,80),
-                Array[Int](24,47,32,60,99,03,45,02,44,75,33,53,78,36,84,20,35,17,12,50),
-                Array[Int](32,98,81,28,64,23,67,10,26,38,40,67,59,54,70,66,18,38,64,70),
-                Array[Int](67,26,20,68,02,62,12,20,95,63,94,39,63,8,40,91,66,49,94,21),
-                Array[Int](24,55,58,05,66,73,99,26,97,17,78,78,96,83,14,88,34,89,63,72),
-                Array[Int](21,36,23,9,75,00,76,44,20,45,35,14,00,61,33,97,34,31,33,95),
-                Array[Int](78,17,53,28,22,75,31,67,15,94,03,80,04,62,16,14,9,53,56,92),
-                Array[Int](16,39,05,42,96,35,31,47,55,58,88,24,00,17,54,24,36,29,85,57),
-                Array[Int](86,56,00,48,35,71,89,07,05,44,44,37,44,60,21,58,51,54,17,58),
-                Array[Int](19,80,81,68,05,94,47,69,28,73,92,13,86,52,17,77,04,89,55,40),
-                Array[Int](04,52,8,83,97,35,99,16,07,97,57,32,16,26,26,79,33,27,98,66),
-                Array[Int](88,36,68,87,57,62,20,72,03,46,33,67,46,55,12,32,63,93,53,69),
-                Array[Int](04,42,16,73,38,25,39,11,24,94,72,18,8,46,29,32,40,62,76,36),
-                Array[Int](20,69,36,41,72,30,23,88,34,62,99,69,82,67,59,85,74,04,36,16),
-                Array[Int](20,73,35,29,78,31,90,01,74,31,49,71,48,86,81,16,23,57,05,54),
-                Array[Int](01,70,54,71,83,51,54,69,16,92,33,48,61,43,52,01,89,19,67,48)
-            )
-        
-        def find( row:Int, col:Int ) = {
-            val hori:Long = if (col > 16) 0 else 1L * grid(row)(col) * grid(row)((col+1)) * grid(row)((col+2)) * grid(row)((col+3))
-            val vert:Long = if (row > 16) 0 else 1L * grid(row)(col) * grid((row+1))(col) * grid((row+2))(col) * grid((row+3))(col)
-            val diag1:Long = if (col > 16 || row > 16) 0 else 1L * grid(row)(col) * grid((row+1))((col+1)) * grid((row+2))((col+2)) * grid((row+3))((col+3))
-            val diag2:Long = if (col < 3 || row > 16) 0 else 1L * grid(row)(col) * grid((row+1))((col-1)) * grid((row+2))((col-2)) * grid((row+3))((col-3))
+            Array[Int]( 8, 02, 22, 97, 38, 15, 00, 40, 00, 75, 04, 05, 07, 78, 52, 12, 50, 77, 91, 8 ),
+            Array[Int]( 49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 04, 56, 62, 0 ),
+            Array[Int]( 81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30, 03, 49, 13, 36, 65 ),
+            Array[Int]( 52, 70, 95, 23, 04, 60, 11, 42, 69, 24, 68, 56, 01, 32, 56, 71, 37, 02, 36, 91 ),
+            Array[Int]( 22, 31, 16, 71, 51, 67, 63, 89, 41, 92, 36, 54, 22, 40, 40, 28, 66, 33, 13, 80 ),
+            Array[Int]( 24, 47, 32, 60, 99, 03, 45, 02, 44, 75, 33, 53, 78, 36, 84, 20, 35, 17, 12, 50 ),
+            Array[Int]( 32, 98, 81, 28, 64, 23, 67, 10, 26, 38, 40, 67, 59, 54, 70, 66, 18, 38, 64, 70 ),
+            Array[Int]( 67, 26, 20, 68, 02, 62, 12, 20, 95, 63, 94, 39, 63, 8, 40, 91, 66, 49, 94, 21 ),
+            Array[Int]( 24, 55, 58, 05, 66, 73, 99, 26, 97, 17, 78, 78, 96, 83, 14, 88, 34, 89, 63, 72 ),
+            Array[Int]( 21, 36, 23, 9, 75, 00, 76, 44, 20, 45, 35, 14, 00, 61, 33, 97, 34, 31, 33, 95 ),
+            Array[Int]( 78, 17, 53, 28, 22, 75, 31, 67, 15, 94, 03, 80, 04, 62, 16, 14, 9, 53, 56, 92 ),
+            Array[Int]( 16, 39, 05, 42, 96, 35, 31, 47, 55, 58, 88, 24, 00, 17, 54, 24, 36, 29, 85, 57 ),
+            Array[Int]( 86, 56, 00, 48, 35, 71, 89, 07, 05, 44, 44, 37, 44, 60, 21, 58, 51, 54, 17, 58 ),
+            Array[Int]( 19, 80, 81, 68, 05, 94, 47, 69, 28, 73, 92, 13, 86, 52, 17, 77, 04, 89, 55, 40 ),
+            Array[Int]( 04, 52, 8, 83, 97, 35, 99, 16, 07, 97, 57, 32, 16, 26, 26, 79, 33, 27, 98, 66 ),
+            Array[Int]( 88, 36, 68, 87, 57, 62, 20, 72, 03, 46, 33, 67, 46, 55, 12, 32, 63, 93, 53, 69 ),
+            Array[Int]( 04, 42, 16, 73, 38, 25, 39, 11, 24, 94, 72, 18, 8, 46, 29, 32, 40, 62, 76, 36 ),
+            Array[Int]( 20, 69, 36, 41, 72, 30, 23, 88, 34, 62, 99, 69, 82, 67, 59, 85, 74, 04, 36, 16 ),
+            Array[Int]( 20, 73, 35, 29, 78, 31, 90, 01, 74, 31, 49, 71, 48, 86, 81, 16, 23, 57, 05, 54 ),
+            Array[Int]( 01, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 01, 89, 19, 67, 48 ) )
+
+        def find( row: Int, col: Int ) = {
+            val hori: Long = if ( col > 16 ) 0 else 1L * grid( row )( col ) * grid( row )( ( col + 1 ) ) * grid( row )( ( col + 2 ) ) * grid( row )( ( col + 3 ) )
+            val vert: Long = if ( row > 16 ) 0 else 1L * grid( row )( col ) * grid( ( row + 1 ) )( col ) * grid( ( row + 2 ) )( col ) * grid( ( row + 3 ) )( col )
+            val diag1: Long = if ( col > 16 || row > 16 ) 0 else 1L * grid( row )( col ) * grid( ( row + 1 ) )( ( col + 1 ) ) * grid( ( row + 2 ) )( ( col + 2 ) ) * grid( ( row + 3 ) )( ( col + 3 ) )
+            val diag2: Long = if ( col < 3 || row > 16 ) 0 else 1L * grid( row )( col ) * grid( ( row + 1 ) )( ( col - 1 ) ) * grid( ( row + 2 ) )( ( col - 2 ) ) * grid( ( row + 3 ) )( ( col - 3 ) )
             hori max vert max diag1 max diag2
         }
-        
-        val r = for( i <- 0 to (grid.length - 1);
-             j <- 0 to (grid(0).length - 1))
-            yield find(i,j) 
+
+        val r = for (
+            i <- 0 to ( grid.length - 1 );
+            j <- 0 to ( grid( 0 ).length - 1 )
+        ) yield find( i, j )
         println( r.max )
-                
+
     }
-    
+
     def solve12 {
         class TriangleNumber {
             var sum = 0L
             var count = 0
-            
+
             def next() = {
                 count += 1
                 sum += count
                 sum
             }
         }
-        
+
         def factors( num: Long ) = {
             if ( num == 1L ) 1
             else {
-                Range.Long.inclusive( 1L, Math.sqrt(num).toLong, 1 ).count( num % _ == 0 ) * 2
+                Range.Long.inclusive( 1L, Math.sqrt( num ).toLong, 1 ).count( num % _ == 0 ) * 2
             }
         }
-        
+
         val tn = new TriangleNumber
         var num = 0L;
         do {
             num = tn.next()
         } while ( factors( num ) <= 500 )
-            
+
         println( num )
     }
-    
+
     def solve13 {
         val numText = """37107287533902102798797998220837590246510135740250
 46376937677490009712648124896970078050417018260538
@@ -360,50 +375,50 @@ object Euler {
 72107838435069186155435662884062257473692284509516
 20849603980134001723930671666823555245252804609722
 53503534226472524250874054075591789781264330331690"""
-            val nums = numText.split("\\r?\\n|\\r").map( s => BigInt( s ) ).toList
-            println( nums.sum.toString().substring(0,10) )
+        val nums = numText.split( "\\r?\\n|\\r" ).map( s => BigInt( s ) ).toList
+        println( nums.sum.toString().substring( 0, 10 ) )
     }
-    
+
     def solve14 {
-        def seqCount( initial: Int) = {
-            var n:Long = initial
+        def seqCount( initial: Int ) = {
+            var n: Long = initial
             var count = 1
-            while( n != 1 ) {
-                n = if( n % 2 == 0 ) n/2 else 3*n+1
+            while ( n != 1 ) {
+                n = if ( n % 2 == 0 ) n / 2 else 3 * n + 1
                 count += 1
             }
             count
         }
-        
+
         var maxLen = 0
         var num = 0
-        (1 until 1000000).foreach( n => { 
-            val count = seqCount(n)
+        ( 1 until 1000000 ).foreach( n => {
+            val count = seqCount( n )
             if ( count > maxLen ) {
                 maxLen = count
                 num = n
             }
-            } )
-        
+        } )
+
         println( num )
     }
-    
+
     def solve15 {
         var count = 0L
-        def countSteps( x:Int, y:Int ) {
+        def countSteps( x: Int, y: Int ) {
             if ( x == 0 && y == 0 ) count += 1
             else {
-                if ( x > 0 ) countSteps( x-1, y )
-                if ( y > 0 ) countSteps( x, y-1 )
+                if ( x > 0 ) countSteps( x - 1, y )
+                if ( y > 0 ) countSteps( x, y - 1 )
             }
         }
         countSteps( 17, 17 )
         println( count )
     }
-    
+
     def solve16 {
-        var prod = BigInt(1)
-        for( i <- 1 to 1000 ) {
+        var prod = BigInt( 1 )
+        for ( i <- 1 to 1000 ) {
             prod = prod * 2
         }
         println( prod.toString().map( _.toString().toInt ).sum )
